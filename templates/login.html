@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Maghrebia Scoring — Connexion</title>
+<style>
+  :root {
+    --navy: #00488C;
+    --navy-dark: #00305e;
+    --orange: #F38F1D;
+    --orange-light: #FCE3C0;
+    --cream: #FAF9F6;
+    --paper: #FFFFFF;
+    --ink: #1C2433;
+    --slate: #5B6472;
+    --line: #E7E4DC;
+    --green: #1F8A5C;
+    --green-bg: #E7F5EE;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1440px; height: 900px; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    display: flex;
+    height: 900px;
+    overflow: hidden;
+  }
+
+  /* ---------- LEFT: FORM ---------- */
+  .form-side {
+    width: 50%;
+    background: var(--paper);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 100px;
+  }
+  .form-wrap { max-width: 380px; width: 100%; margin: 0 auto; }
+
+  .form-logo { height: 38px; margin-bottom: 44px; display: block; }
+
+  .form-wrap h1 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 27px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .form-wrap .lede {
+    font-size: 14px;
+    color: var(--slate);
+    margin-bottom: 34px;
+    line-height: 1.5;
+  }
+
+  .field { margin-bottom: 18px; }
+  .field label {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 7px;
+  }
+  .input-wrap { position: relative; }
+  .input-wrap svg {
+    position: absolute;
+    left: 13px; top: 50%;
+    transform: translateY(-50%);
+    width: 16px; height: 16px;
+    color: var(--slate);
+    opacity: 0.6;
+  }
+  .field input {
+    width: 100%;
+    padding: 12px 14px 12px 38px;
+    border: 1.5px solid var(--line);
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--ink);
+    font-family: inherit;
+    outline: none;
+  }
+  .field input::placeholder { color: #A8AEB8; }
+  .field input.focused { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(0,72,140,0.10); }
+
+  .row-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 26px;
+    font-size: 13px;
+  }
+  .remember { display: flex; align-items: center; gap: 8px; color: var(--ink); }
+  .remember .checkbox {
+    width: 16px; height: 16px;
+    border: 1.5px solid #C7CAD1;
+    border-radius: 4px;
+    background: var(--navy);
+    border-color: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .remember .checkbox svg { width: 10px; height: 10px; color: white; }
+  .forgot { color: var(--navy); font-weight: 600; text-decoration: none; }
+
+  .btn-login {
+    width: 100%;
+    background: var(--orange);
+    color: white;
+    font-weight: 700;
+    font-size: 14.5px;
+    padding: 13px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 22px;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 22px 0;
+    font-size: 12px;
+    color: var(--slate);
+  }
+  .divider::before, .divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  .sso-note {
+    text-align: center;
+    font-size: 12.5px;
+    color: var(--slate);
+    background: #F7F6F2;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 12px 14px;
+    line-height: 1.5;
+  }
+
+  .footer-help {
+    margin-top: 40px;
+    font-size: 12px;
+    color: var(--slate);
+    text-align: center;
+  }
+  .footer-help a { color: var(--navy); font-weight: 600; text-decoration: none; }
+
+  /* ---------- RIGHT: BRAND PANEL ---------- */
+  .brand-side {
+    width: 50%;
+    background: linear-gradient(160deg, var(--navy) 0%, var(--navy-dark) 100%);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 56px 64px;
+  }
+  .brand-motif {
+    position: absolute;
+    inset: 0;
+  }
+  .brand-stripe-1 {
+    position: absolute;
+    left: -10%; bottom: -10%;
+    width: 70%; height: 80%;
+    background: var(--orange);
+    opacity: 0.9;
+    clip-path: polygon(35% 0%, 55% 0%, 20% 100%, 0% 100%);
+  }
+  .brand-stripe-2 {
+    position: absolute;
+    left: 18%; bottom: -10%;
+    width: 70%; height: 80%;
+    background: var(--orange);
+    opacity: 0.9;
+    clip-path: polygon(35% 0%, 55% 0%, 20% 100%, 0% 100%);
+  }
+  .brand-stripe-1, .brand-stripe-2 { opacity: 0.16; }
+
+  .brand-top { position: relative; z-index: 2; }
+  .brand-eyebrow {
+    font-size: 11.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .brand-top h2 {
+    font-family: Georgia, serif;
+    font-size: 32px;
+    font-weight: 600;
+    color: white;
+    max-width: 420px;
+    line-height: 1.32;
+  }
+  .brand-top p {
+    margin-top: 16px;
+    font-size: 14.5px;
+    color: rgba(255,255,255,0.68);
+    max-width: 380px;
+    line-height: 1.6;
+  }
+
+  .score-demo {
+    position: relative;
+    z-index: 2;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 14px;
+    padding: 22px 24px;
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .score-ring { flex-shrink: 0; }
+  .score-demo-text .sd-label {
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.55);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .score-demo-text .sd-title {
+    font-family: Georgia, serif;
+    font-size: 16px;
+    color: white;
+    font-weight: 600;
+    margin-bottom: 3px;
+  }
+  .score-demo-text .sd-sub { font-size: 12.5px; color: rgba(255,255,255,0.55); }
+
+  .brand-bottom-bar {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    color: rgba(255,255,255,0.45);
+  }
+</style>
+</head>
+<body>
+
+  <div class="form-side">
+    <div class="form-wrap">
+      <h1>Connexion</h1>
+      <p class="lede">Accédez à votre tableau de scoring</p>
+
+      <form onsubmit="loginUser(event)">
+        <div class="field">
+          <label>Identifiant professionnel</label>
+          <div class="input-wrap">
+            <input type="text" name="email" placeholder="s.benyaha@maghrebia.tn" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Mot de passe</label>
+          <div class="input-wrap">
+            <input type="password" name="password" placeholder="********" required>
+          </div>
+        </div>
+
+        <div class="row-between">
+          <label class="remember">
+            <input type="checkbox" class="checkbox">
+            <span>Se souvenir de moi</span>
+          </label>
+          <a href="#" class="forgot">Mot de passe oublié?</a>
+        </div>
+
+        <button type="submit" class="btn-login">
+          Se connecter
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div class="brand-side">
+    <div class="brand-motif">
+      <div class="brand-stripe-1"></div>
+      <div class="brand-stripe-2"></div>
+    </div>
+
+    <div class="brand-top">
+      <div class="brand-eyebrow">Syst&egrave;me de scoring &middot; Assurance Maghrebia</div>
+      <h2>&Eacute;valuer la solvabilit&eacute; d&egrave;s la souscription.</h2>
+      <p>Un score instantan&eacute; pour anticiper le risque de non-paiement et aider chaque d&eacute;cision de souscription.</p>
+    </div>
+
+    <div class="score-demo">
+      <svg class="score-ring" width="64" height="64" viewBox="0 0 64 64">
+        <circle cx="32" cy="32" r="26" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="7"/>
+        <circle cx="32" cy="32" r="26" fill="none" stroke="#F38F1D" stroke-width="7"
+          stroke-dasharray="130 33" transform="rotate(-90 32 32)" stroke-linecap="round"/>
+        <text x="32" y="37" text-anchor="middle" font-family="Georgia, serif" font-size="17" font-weight="700" fill="white">742</text>
+      </svg>
+      <div class="score-demo-text">
+        <div class="sd-label">Exemple de score</div>
+        <div class="sd-title">Risque faible</div>
+        <div class="sd-sub">Dossier &eacute;valu&eacute; en 1,8 seconde</div>
+      </div>
+
+      <!-- RIGHT SIDE SIGNUP (ADDED ONLY) -->
+<div style="margin-top:40px; position:relative; z-index:2; background:rgba(255,255,255,0.08); padding:20px; border-radius:12px; color:white; backdrop-filter: blur(6px);">
+
+  <h3 style="margin-bottom:10px;">Créer un compte (test)</h3>
+
+  <input id="r_username" placeholder="username"
+    style="width:100%; padding:8px; margin-bottom:8px; border-radius:6px; border:none;">
+
+  <input id="r_email" placeholder="email"
+    style="width:100%; padding:8px; margin-bottom:8px; border-radius:6px; border:none;">
+
+  <input id="r_password" type="password" placeholder="password"
+    style="width:100%; padding:8px; margin-bottom:8px; border-radius:6px; border:none;">
+
+  <select id="r_role"
+    style="width:100%; padding:8px; margin-bottom:10px; border-radius:6px; border:none;">
+    <option value="souscripteur">Souscripteur</option>
+    <option value="data_scientist">Data Scientist</option>
+    <option value="admin">Admin</option>
+  </select>
+
+  <button onclick="registerRight()"
+    style="width:100%; padding:10px; border:none; border-radius:8px; background:#F38F1D; color:white; font-weight:bold;">
+    Sign up
+  </button>
+
+</div>
+      
+    </div>
+
+    <div class="brand-bottom-bar">
+      <span>&copy; Assurance Maghrebia</span>
+      <span>Confidentialit&eacute; &middot; Aide</span>
+    </div>
+  </div>
+
+</body>
+</html>
+
+<script>
+
+async function loginUser(event) {
+    event.preventDefault(); // 🔴 IMPORTANT: stop form reload
+
+    const email = document.querySelector('input[type="text"]').value;
+    const password = document.querySelector('input[type="password"]').value;
+
+    try {
+        const res = await fetch("http://127.0.0.1:5000/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            // redirect après login réussi
+            window.location.href = "/home";
+        } else {
+            alert(data.message);
+        }
+
+    } catch (error) {
+        console.error("Login error:", error);
+        alert("Erreur de connexion serveur");
+    }
+}
+
+async function registerRight() {
+
+    try {
+        const res = await fetch("http://127.0.0.1:5000/signup", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username: document.getElementById("r_username").value,
+                email: document.getElementById("r_email").value,
+                password: document.getElementById("r_password").value,
+                role: document.getElementById("r_role").value
+            })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            // Redirect to home after successful signup
+            window.location.href = "/home";
+        } else {
+            alert(data.message);
+        }
+
+    } catch (error) {
+        console.error("Register error:", error);
+        alert("Erreur inscription serveur");
+    }
+}
+
+</script>

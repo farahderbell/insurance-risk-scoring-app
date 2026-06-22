@@ -1,0 +1,92 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f4f6f8;
+}
+
+/* ===================== */
+/* LOGIN CENTER CARD     */
+/* ===================== */
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Card style */
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    width: 320px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+
+/* Inputs */
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+
+/* ===================== */
+/* BUTTON (BLUE + YELLOW) */
+/* ===================== */
+button {
+    width: 100%;
+    padding: 10px;
+    background: #1e4ed8;   /* BLUE */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background: #facc15;   /* YELLOW hover */
+    color: black;
+}
+
+/* ===================== */
+/* NAVBAR                */
+/* ===================== */
+.navbar {
+    background: #1e4ed8;   /* BLUE */
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar a {
+    color: #facc15;   /* YELLOW link */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.navbar a:hover {
+    color: white;
+}
+
+/* ===================== */
+/* HOME CONTAINER        */
+/* ===================== */
+.container {
+    padding: 20px;
+}
+
+/* Dashboard cards */
+.container .card {
+    margin-top: 15px;
+    border-left: 5px solid #facc15; /* YELLOW accent */
+}
+
+/* ERROR TEXT */
+.error {
+    color: red;
+}

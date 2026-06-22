@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home - Insurance App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="navbar">
+        <h3>Maghrebia Risk Platform</h3>
+        <a href="/logout">Logout</a>
+    </div>
+
+    <div class="container">
+        <h1>🏠 Welcome, {{ user }}</h1>
+
+        <div class="card">
+            <h3>System Status</h3>
+            <p>🟢 Active</p>
+        </div>
+
+        <div class="card">
+            <h3>Project</h3>
+            <p>Solvency scoring prototype for insurance clients.</p>
+        </div>
+
+        <div class="card">
+            <h3>Next Step</h3>
+            <p>Add client risk scoring module + ML model.</p>
+        </div>
+    </div>
+</body>
+</html>
