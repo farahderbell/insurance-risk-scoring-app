@@ -13,7 +13,12 @@ class UserRepository:
         """, (username, email, password, role))
 
         conn.commit()
+        
+        # Return the created user data
+        cursor.execute("SELECT id, username, email, role FROM users WHERE email=%s", (email,))
+        user = cursor.fetchone()
         conn.close()
+        return user
 
     @staticmethod
     def get_by_email(email):

@@ -9,7 +9,8 @@ class AuthService:
 
     def register(self, username, email, password, role):
         hashed = hashlib.sha256(password.encode()).hexdigest()
-        self.repo.create(username, email, hashed, role)
+        user_data = self.repo.create(username, email, hashed, role)
+        return user_data
 
     def login(self, email, password):
         hashed = hashlib.sha256(password.encode()).hexdigest()

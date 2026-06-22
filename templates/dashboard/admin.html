@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard - Maghrebia Risk Platform</title>
+    <style>
+        /* ---------- Base ---------- */
+        :root {
+            --navy: #00488C;
+            --navy-dark: #00305e;
+            --orange: #F38F1D;
+            --cream: #FAF9F6;
+            --paper: #FFFFFF;
+            --ink: #1C2433;
+            --slate: #5B6472;
+            --line: #E7E4DC;
+            --green: #1F8A5C;
+            --green-bg: #E7F5EE;
+            --purple: #5E35B1;
+            --purple-bg: #EDE7F6;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background: var(--cream);
+            color: var(--ink);
+        }
+
+        /* ---------- Navbar ---------- */
+        .navbar {
+            height: 64px;
+            background: var(--navy);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            box-shadow: 0 2px 10px rgba(0, 30, 60, 0.12);
+        }
+
+        .navbar-left { display: flex; align-items: center; gap: 12px; }
+
+        .navbar-logo-mark {
+            width: 30px; height: 30px; border-radius: 7px;
+            background: var(--orange); color: white;
+            font-weight: 700; font-size: 15px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .navbar-title { font-weight: 600; font-size: 15px; white-space: nowrap; }
+
+        .navbar-right { display: flex; align-items: center; gap: 14px; }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 10.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: rgba(255, 255, 255, 0.16);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .navbar-logout {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 7px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 7px;
+            transition: background 0.15s ease;
+            white-space: nowrap;
+        }
+
+        .navbar-logout:hover { background: rgba(255, 255, 255, 0.12); color: white; }
+
+        /* ---------- Layout ---------- */
+        .container {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 48px 32px 64px;
+        }
+
+        .page-head {
+            margin-bottom: 36px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .page-head h1 {
+            font-size: 25px;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .page-head .sub {
+            margin-top: 5px;
+            font-size: 13.5px;
+            color: var(--slate);
+        }
+
+        /* ---------- Cards ---------- */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 26px 24px;
+            box-shadow: 0 1px 2px rgba(0, 30, 60, 0.04);
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(0, 30, 60, 0.09);
+        }
+
+        .card-icon {
+            width: 42px; height: 42px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 18px;
+        }
+
+        .card-icon svg { width: 21px; height: 21px; }
+
+        .card-icon.tone-navy { background: #E5EDF6; color: var(--navy); }
+        .card-icon.tone-purple { background: var(--purple-bg); color: var(--purple); }
+        .card-icon.tone-orange { background: #FCE9D2; color: var(--orange); }
+
+        .card-title {
+            font-size: 16.5px;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 8px;
+        }
+
+        .card-text {
+            font-size: 13.5px;
+            color: var(--slate);
+            line-height: 1.55;
+        }
+
+        .card-spacer { flex: 1; }
+
+        .card-btn {
+            align-self: flex-start;
+            background: var(--paper);
+            color: var(--navy);
+            border: 1.5px solid var(--navy);
+            padding: 9px 16px;
+            border-radius: 7px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.15s ease, color 0.15s ease;
+            margin-top: 18px;
+        }
+
+        .card-btn:hover {
+            background: var(--navy);
+            color: white;
+        }
+
+        .card-btn.btn-fill {
+            background: var(--navy);
+            color: white;
+            border-color: var(--navy);
+        }
+
+        .card-btn.btn-fill:hover {
+            background: var(--navy-dark);
+        }
+
+        .card-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* ---------- Responsive ---------- */
+        @media (max-width: 860px) {
+            .card-grid { grid-template-columns: 1fr; }
+            .container { padding: 32px 16px 48px; }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="navbar-left">
+            <span class="navbar-logo-mark">M</span>
+            <div class="navbar-title">Maghrebia Risk Platform &middot; Administration</div>
+        </div>
+        <div class="navbar-right">
+            <span class="badge">Administrateur</span>
+            <a href="/logout" class="navbar-logout">Déconnexion</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="page-head">
+            <h1>Bienvenue, {{ user.username }}</h1>
+            <div class="sub">Accès rapide aux outils d'administration disponibles.</div>
+        </div>
+
+        <div class="card-grid">
+
+            <div class="card">
+                <div class="card-icon tone-navy">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <div class="card-title">Gestion des utilisateurs</div>
+                <p class="card-text">Créer, modifier ou supprimer des comptes et assigner les rôles (Admin, Data Scientist, Souscripteur).</p>
+                <div class="card-spacer"></div>
+                <button class="card-btn btn-fill" onclick="window.location.href='/utilisateurs'">Gérer les utilisateurs</button>
+            </div>
+
+            <div class="card">
+                <div class="card-icon tone-purple">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2a4 4 0 0 1 4 4v1.17a4 4 0 0 1 2 3.46V14a4 4 0 0 1-2 3.46V18a4 4 0 0 1-8 0v-.54A4 4 0 0 1 6 14v-3.37a4 4 0 0 1 2-3.46V6a4 4 0 0 1 4-4z"/><path d="M9 14h.01M15 14h.01"/></svg>
+                </div>
+                <div class="card-title">Espace AI Agent</div>
+                <p class="card-text">Assistant intelligent pour aider à l'administration et à l'analyse de la plateforme.</p>
+                <div class="card-spacer"></div>
+                <button class="card-btn" onclick="window.location.href='/agent'">Essayer l'agent</button>
+            </div>
+
+            <div class="card">
+                <div class="card-icon tone-orange">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+                </div>
+                <div class="card-title">Essayer le modèle de scoring</div>
+                <p class="card-text">Tester le modèle de scoring actuel sur un dossier afin d'observer le score généré.</p>
+                <div class="card-spacer"></div>
+                <button class="card-btn btn-fill" onclick="window.location.href='/scoring/essai'">Essayer le modèle</button>
+            </div>
+
+        </div>
+
+        <div class="section-title" style="margin-top: 48px;">ℹ️ Comment ça marche</div>
+        <div style="background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 28px; box-shadow: 0 1px 2px rgba(0, 30, 60, 0.04);">
+            <h3 style="color: var(--navy); margin-bottom: 16px;">Votre rôle d'Administrateur</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
+                <div>
+                    <h4 style="color: var(--ink); margin-bottom: 8px;">👥 Gestion des Utilisateurs</h4>
+                    <p style="color: var(--slate); line-height: 1.6;">Gérez les comptes utilisateurs, assignez des rôles (Admin, Data Scientist, Souscripteur) et contrôlez les accès.</p>
+                </div>
+                <div>
+                    <h4 style="color: var(--ink); margin-bottom: 8px;">📊 Suivi des Performances</h4>
+                    <p style="color: var(--slate); line-height: 1.6;">Surveillez les modèles, les statistiques de scoring et consultez les rapports détaillés.</p>
+                </div>
+                <div>
+                    <h4 style="color: var(--ink); margin-bottom: 8px;">🔐 Sécurité & Audit</h4>
+                    <p style="color: var(--slate); line-height: 1.6;">Accédez aux journaux d'audit, vérifiez les décisions critiques et gérez les permissions.</p>
+                </div>
+                <div>
+                    <h4 style="color: var(--ink); margin-bottom: 8px;">⚙️ Configuration</h4>
+                    <p style="color: var(--slate); line-height: 1.6;">Configurez les paramètres système, gérez la base de données et l'état de la plateforme.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

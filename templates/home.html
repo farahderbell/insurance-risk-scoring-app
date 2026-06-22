@@ -1,34 +1,738 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Home - Insurance App</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Accueil - Maghrebia Risk Platform</title>
+    <style>
+        /* ---------- Base ---------- */
+        :root {
+            --navy: #00488C;
+            --navy-dark: #00305e;
+            --orange: #F38F1D;
+            --cream: #FAF9F6;
+            --paper: #FFFFFF;
+            --ink: #1C2433;
+            --slate: #5B6472;
+            --line: #E7E4DC;
+            --green: #1F8A5C;
+            --green-bg: #E7F5EE;
+            --amber: #C97A12;
+            --amber-bg: #FBEFDD;
+            --red: #B23A2E;
+            --red-bg: #F8E8E5;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background: var(--cream);
+            color: var(--ink);
+        }
+
+        /* ---------- Navbar ---------- */
+        .navbar {
+            height: 64px;
+            background: var(--navy);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            box-shadow: 0 2px 10px rgba(0, 30, 60, 0.12);
+        }
+
+        .navbar-left { display: flex; align-items: center; gap: 36px; }
+        .navbar-brand { display: flex; align-items: center; gap: 10px; }
+
+        .navbar-logo-mark {
+            width: 30px; height: 30px; border-radius: 7px;
+            background: var(--orange); color: white;
+            font-weight: 700; font-size: 15px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .navbar-title { font-weight: 600; font-size: 15px; white-space: nowrap; }
+
+        .navbar-links { display: flex; align-items: center; gap: 4px; }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 13.5px;
+            font-weight: 500;
+            padding: 9px 14px;
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+
+        .nav-link svg { width: 15px; height: 15px; opacity: 0.85; }
+        .nav-link:hover { background: rgba(255, 255, 255, 0.08); color: white; }
+        .nav-link.active { background: rgba(255, 255, 255, 0.14); color: white; font-weight: 600; }
+
+        .navbar-right { display: flex; align-items: center; gap: 14px; }
+
+        .navbar-user {
+            display: flex; align-items: center; gap: 9px;
+            font-size: 13px; color: rgba(255, 255, 255, 0.85);
+            line-height: 1.3;
+        }
+
+        .navbar-avatar {
+            width: 28px; height: 28px; border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; font-weight: 700; flex-shrink: 0;
+        }
+
+        .navbar-role-tag {
+            font-size: 10.5px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 600;
+        }
+
+        .navbar-logout {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 7px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 7px;
+            transition: background 0.15s ease;
+            white-space: nowrap;
+        }
+
+        .navbar-logout:hover { background: rgba(255, 255, 255, 0.12); color: white; }
+
+        /* ---------- Layout ---------- */
+        .container { max-width: 1100px; margin: 0 auto; padding: 48px 32px 64px; }
+
+        .page-head {
+            margin-bottom: 36px;
+            opacity: 0;
+            transform: translateY(14px);
+            animation: fadeUp 0.6s ease forwards;
+        }
+
+        .page-head .wave {
+            display: inline-block;
+            animation: wave 1.8s ease-in-out 0.6s infinite;
+            transform-origin: 70% 70%;
+        }
+
+        .page-head h1 { font-size: 27px; font-weight: 700; color: var(--ink); }
+        .page-sub { margin-top: 6px; font-size: 14px; color: var(--slate); }
+
+        /* ---------- KPI row ---------- */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .kpi-card {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 18px 20px;
+            opacity: 0;
+            transform: translateY(16px);
+            animation: fadeUp 0.55s ease forwards;
+        }
+
+        .kpi-card:nth-child(1) { animation-delay: 0.08s; }
+        .kpi-card:nth-child(2) { animation-delay: 0.16s; }
+        .kpi-card:nth-child(3) { animation-delay: 0.24s; }
+        .kpi-card:nth-child(4) { animation-delay: 0.32s; }
+
+        .kpi-label { font-size: 12px; color: var(--slate); font-weight: 500; margin-bottom: 8px; }
+        .kpi-value { font-size: 24px; font-weight: 700; color: var(--ink); }
+        .kpi-value.amber { color: var(--amber); }
+        .kpi-value.red { color: var(--red); }
+        .kpi-value.green { color: var(--green); }
+        .kpi-value.navy { color: var(--navy); }
+
+        /* ---------- Sections / cards ---------- */
+        .section-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 14px;
+            opacity: 0;
+            animation: fadeUp 0.5s ease forwards;
+            animation-delay: 0.36s;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .card {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 22px 24px;
+            box-shadow: 0 1px 2px rgba(0, 30, 60, 0.04);
+            opacity: 0;
+            transform: translateY(16px);
+            animation: fadeUp 0.55s ease forwards;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0, 30, 60, 0.08); }
+
+        .card:nth-child(1) { animation-delay: 0.42s; }
+        .card:nth-child(2) { animation-delay: 0.50s; }
+        .card:nth-child(3) { animation-delay: 0.58s; }
+
+        .card-accent { border-top: 3px solid var(--orange); }
+
+        .card-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--slate);
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .card-main { font-size: 16px; font-weight: 600; color: var(--ink); }
+        .card-text { font-size: 14px; color: var(--ink); line-height: 1.55; }
+        .card-row { display: flex; align-items: center; gap: 8px; }
+
+        .status-dot {
+            width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0;
+            background: var(--green);
+            box-shadow: 0 0 0 4px var(--green-bg);
+            animation: pulse 2.2s ease-in-out infinite;
+        }
+
+        .status-dot.amber { background: var(--amber); box-shadow: 0 0 0 4px var(--amber-bg); }
+
+        .card-cta {
+            margin-top: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--navy);
+            text-decoration: none;
+        }
+
+        .card-cta svg { width: 13px; height: 13px; }
+
+        /* ---------- Panel / table ---------- */
+        .panel {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(16px);
+            animation: fadeUp 0.55s ease forwards;
+            animation-delay: 0.62s;
+            margin-bottom: 24px;
+        }
+
+        .panel-header {
+            padding: 18px 22px 14px;
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .panel-header h2 { font-size: 15.5px; font-weight: 700; }
+        .panel-header .link { font-size: 12.5px; color: var(--navy); font-weight: 600; text-decoration: none; }
+
+        table { width: 100%; border-collapse: collapse; }
+
+        thead th {
+            text-align: left;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--slate);
+            font-weight: 700;
+            padding: 11px 22px;
+            background: #FBFAF8;
+        }
+
+        tbody td {
+            padding: 13px 22px;
+            font-size: 13.5px;
+            border-top: 1px solid var(--line);
+            vertical-align: middle;
+        }
+
+        tbody tr:hover { background: #FBFAF8; }
+
+        .client-name { font-weight: 600; color: var(--ink); }
+        .client-id { font-size: 11.5px; color: var(--slate); margin-top: 1px; }
+
+        .score-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px 4px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .score-pill .dot { width: 7px; height: 7px; border-radius: 50%; }
+        .score-pill.low { background: var(--green-bg); color: var(--green); }
+        .score-pill.low .dot { background: var(--green); }
+        .score-pill.mid { background: var(--amber-bg); color: var(--amber); }
+        .score-pill.mid .dot { background: var(--amber); }
+        .score-pill.high { background: var(--red-bg); color: var(--red); }
+        .score-pill.high .dot { background: var(--red); }
+
+        .decision-btn {
+            font-size: 11.5px;
+            font-weight: 600;
+            padding: 5px 11px;
+            border-radius: 6px;
+            border: 1px solid var(--line);
+            background: var(--paper);
+            color: var(--ink);
+            cursor: pointer;
+        }
+
+        .role-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11.5px;
+            font-weight: 700;
+        }
+        .role-pill.role-admin { background: #EDE7F6; color: #5E35B1; }
+        .role-pill.role-souscripteur { background: var(--green-bg); color: var(--green); }
+        .role-pill.role-data_scientist { background: #E3F2FD; color: #1565C0; }
+
+        /* ---------- Keyframes ---------- */
+        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+        @keyframes wave {
+            0%, 100% { transform: rotate(0deg); }
+            15% { transform: rotate(14deg); }
+            30% { transform: rotate(-8deg); }
+            45% { transform: rotate(14deg); }
+            60% { transform: rotate(0deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 4px var(--green-bg); }
+            50% { box-shadow: 0 0 0 7px var(--green-bg); }
+        }
+
+        /* ---------- Responsive ---------- */
+        @media (max-width: 960px) {
+            .navbar-links { display: none; }
+            .kpi-row { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 760px) {
+            .card-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 
 <body>
-    <div class="navbar">
-        <h3>Maghrebia Risk Platform</h3>
-        <a href="/logout">Logout</a>
-    </div>
 
-    <div class="container">
-        <h1>🏠 Welcome, {{ user }}</h1>
+    <header class="navbar">
+        <div class="navbar-left">
+            <div class="navbar-brand">
+                <span class="navbar-logo-mark">M</span>
+                <span class="navbar-title">Maghrebia Risk Platform</span>
+            </div>
 
-        <div class="card">
-            <h3>System Status</h3>
-            <p>🟢 Active</p>
+            <nav class="navbar-links">
+                <a href="/" class="nav-link active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+                    Tableau de bord
+                </a>
+
+                {% if user.role == 'underwriter' %}
+                <a href="/nouveau-dossier" class="nav-link">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                    Évaluer un dossier
+                </a>
+                <a href="/dossiers" class="nav-link">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+                    Mes dossiers
+                </a>
+                <a href="/clients" class="nav-link">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    Clients
+                </a>
+
+                {% elif user.role == 'data_scientist' %}
+                <a href="/modeles" class="nav-link">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    Modèles
+                </a>
+                <a href="/performance" class="nav-link">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg>
+                    Performance
+                </a>
+                <a href="/jeux-donnees" class="nav-link">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>
+                    Jeux de données
+                </a>
+
+                {% elif user.role == 'admin' %}
+                <a href="/utilisateurs" class="nav-link">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    Utilisateurs
+                </a>
+                <a href="/controle-decisions" class="nav-link">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+                    Contrôle des décisions
+                </a>
+                <a href="/parametres" class="nav-link">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    Paramètres
+                </a>
+                {% endif %}
+            </nav>
         </div>
 
-        <div class="card">
-            <h3>Project</h3>
-            <p>Solvency scoring prototype for insurance clients.</p>
+        <div class="navbar-right">
+            <div class="navbar-user">
+                <span class="navbar-avatar">{{ user.username[0]|upper }}</span>
+                <span>
+                    {{ user.username }}<br>
+                    <span class="navbar-role-tag">
+                        {% if user.role == 'underwriter' %}Souscripteur
+                        {% elif user.role == 'data_scientist' %}Data Scientist
+                        {% elif user.role == 'admin' %}Administrateur
+                        {% endif %}
+                    </span>
+                </span>
+            </div>
+            <a href="/logout" class="navbar-logout">Déconnexion</a>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <div class="page-head">
+            <h1>Bienvenue, {{ user.username }} <span class="wave">👋</span></h1>
+            <p class="page-sub">
+                {% if user.role == 'underwriter' %}
+                    Voici les dossiers de souscription qui nécessitent votre attention.
+                {% elif user.role == 'data_scientist' %}
+                    Voici l'état des modèles de scoring et de leurs performances.
+                {% elif user.role == 'admin' %}
+                    Voici la vue d'ensemble de la plateforme et des décisions à contrôler.
+                {% endif %}
+            </p>
         </div>
 
-        <div class="card">
-            <h3>Next Step</h3>
-            <p>Add client risk scoring module + ML model.</p>
+        <!-- ========================= SOUSCRIPTEUR ========================= -->
+        {% if user.role == 'underwriter' %}
+
+        <div class="kpi-row">
+            <div class="kpi-card">
+                <div class="kpi-label">Dossiers en attente</div>
+                <div class="kpi-value">7</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">À risque élevé</div>
+                <div class="kpi-value red">2</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Traités aujourd'hui</div>
+                <div class="kpi-value green">14</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Score moyen du jour</div>
+                <div class="kpi-value">687</div>
+            </div>
         </div>
-    </div>
+
+        <div class="section-title">Actions rapides</div>
+        <div class="card-grid">
+            <div class="card card-accent">
+                <div class="card-label">Évaluer un nouvel assuré</div>
+                <p class="card-text">Saisissez les informations de souscription pour obtenir un score de solvabilité instantané.</p>
+                <a href="/nouveau-dossier" class="card-cta">
+                    Lancer un scoring
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </a>
+            </div>
+            <div class="card">
+                <div class="card-label">Dossiers en attente de décision</div>
+                <div class="card-row">
+                    <span class="status-dot"></span>
+                    <span class="card-main">7 dossiers à traiter</span>
+                </div>
+                <a href="/dossiers?statut=attente" class="card-cta">
+                    Voir la liste
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </a>
+            </div>
+            <div class="card">
+                <div class="card-label">Consulter un client</div>
+                <p class="card-text">Recherchez un assuré pour consulter son historique et son score de solvabilité.</p>
+                <a href="/clients" class="card-cta">
+                    Rechercher
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </a>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <h2>Dossiers récents à évaluer</h2>
+                <a href="/dossiers" class="link">Voir tout l'historique</a>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Assuré</th>
+                        <th>Type de contrat</th>
+                        <th>Score</th>
+                        <th>Niveau de risque</th>
+                        <th>Décision</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><div class="client-name">Yasmine Cherif</div><div class="client-id">Dossier #20461</div></td>
+                        <td>Automobile</td>
+                        <td>781</td>
+                        <td><span class="score-pill low"><span class="dot"></span>Faible</span></td>
+                        <td><button class="decision-btn">Examiner</button></td>
+                    </tr>
+                    <tr>
+                        <td><div class="client-name">Mehdi Triki</div><div class="client-id">Dossier #20460</div></td>
+                        <td>Habitation</td>
+                        <td>593</td>
+                        <td><span class="score-pill mid"><span class="dot"></span>Moyen</span></td>
+                        <td><button class="decision-btn">Examiner</button></td>
+                    </tr>
+                    <tr>
+                        <td><div class="client-name">Nour Abidi</div><div class="client-id">Dossier #20459</div></td>
+                        <td>Santé</td>
+                        <td>412</td>
+                        <td><span class="score-pill high"><span class="dot"></span>Élevé</span></td>
+                        <td><button class="decision-btn">Examiner</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ========================= DATA SCIENTIST ========================= -->
+        {% elif user.role == 'data_scientist' %}
+
+        <div class="kpi-row">
+            <div class="kpi-card">
+                <div class="kpi-label">Modèle en production</div>
+                <div class="kpi-value navy">XGBoost v3</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">AUC-ROC actuel</div>
+                <div class="kpi-value green">0,87</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Dérive détectée</div>
+                <div class="kpi-value amber">Légère</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Dernier entraînement</div>
+                <div class="kpi-value">12 j.</div>
+            </div>
+        </div>
+
+        <div class="section-title">Actions rapides</div>
+        <div class="card-grid">
+            <div class="card card-accent">
+                <div class="card-label">Entraîner un nouveau modèle</div>
+                <p class="card-text">Lancez un nouvel entraînement à partir du dernier jeu de données disponible.</p>
+                <a href="/modeles/nouveau" class="card-cta">
+                    Démarrer l'entraînement
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </a>
+            </div>
+            <div class="card">
+                <div class="card-label">Surveillance de la dérive</div>
+                <div class="card-row">
+                    <span class="status-dot amber"></span>
+                    <span class="card-main">Dérive légère détectée</span>
+                </div>
+                <a href="/performance" class="card-cta">
+                    Voir le rapport
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </a>
+            </div>
+            <div class="card">
+                <div class="card-label">Explicabilité (SHAP)</div>
+                <p class="card-text">Analysez l'importance des variables et l'explicabilité des prédictions du modèle.</p>
+                <a href="/modeles/explicabilite" class="card-cta">
+                    Explorer
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </a>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <h2>Historique des modèles</h2>
+                <a href="/modeles" class="link">Voir tous les modèles</a>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Modèle</th>
+                        <th>Version</th>
+                        <th>AUC-ROC</th>
+                        <th>Statut</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><div class="client-name">XGBoost</div><div class="client-id">Entraîné le 10/06/2026</div></td>
+                        <td>v3</td>
+                        <td>0,87</td>
+                        <td><span class="score-pill low"><span class="dot"></span>En production</span></td>
+                        <td><button class="decision-btn">Détails</button></td>
+                    </tr>
+                    <tr>
+                        <td><div class="client-name">LightGBM</div><div class="client-id">Entraîné le 02/06/2026</div></td>
+                        <td>v2</td>
+                        <td>0,84</td>
+                        <td><span class="score-pill mid"><span class="dot"></span>En test</span></td>
+                        <td><button class="decision-btn">Détails</button></td>
+                    </tr>
+                    <tr>
+                        <td><div class="client-name">Régression logistique</div><div class="client-id">Entraîné le 28/05/2026</div></td>
+                        <td>v1</td>
+                        <td>0,79</td>
+                        <td><span class="score-pill high"><span class="dot"></span>Archivé</span></td>
+                        <td><button class="decision-btn">Détails</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ========================= ADMIN ========================= -->
+        {% elif user.role == 'admin' %}
+
+        <div class="kpi-row">
+            <div class="kpi-card">
+                <div class="kpi-label">Utilisateurs actifs</div>
+                <div class="kpi-value">23</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Décisions à contrôler</div>
+                <div class="kpi-value amber">5</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Anomalies signalées</div>
+                <div class="kpi-value red">1</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Disponibilité plateforme</div>
+                <div class="kpi-value green">99,9 %</div>
+            </div>
+        </div>
+
+        <div class="section-title">Actions rapides</div>
+        <div class="card-grid">
+            <div class="card card-accent">
+                <div class="card-label">Gérer les utilisateurs</div>
+                <p class="card-text">Ajoutez, modifiez ou désactivez les comptes et les droits d'accès des collaborateurs.</p>
+                <a href="/utilisateurs" class="card-cta">
+                    Accéder à la gestion
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </a>
+            </div>
+            <div class="card">
+                <div class="card-label">Décisions à contrôler</div>
+                <div class="card-row">
+                    <span class="status-dot amber"></span>
+                    <span class="card-main">5 décisions en attente de revue</span>
+                </div>
+                <a href="/controle-decisions" class="card-cta">
+                    Examiner
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </a>
+            </div>
+            <div class="card">
+                <div class="card-label">État de la plateforme</div>
+                <p class="card-text">Consultez les journaux système et le suivi du bon fonctionnement de la plateforme.</p>
+                <a href="/parametres" class="card-cta">
+                    Voir le statut
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </a>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <h2>Dernières décisions prises</h2>
+                <a href="/controle-decisions" class="link">Voir tout l'historique</a>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Dossier</th>
+                        <th>Souscripteur</th>
+                        <th>Score</th>
+                        <th>Décision</th>
+                        <th>Contrôle</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><div class="client-name">Yasmine Cherif</div><div class="client-id">Dossier #20461</div></td>
+                        <td>Sami Ben Yaha</td>
+                        <td>781</td>
+                        <td><span class="score-pill low"><span class="dot"></span>Acceptée</span></td>
+                        <td><button class="decision-btn">Valider</button></td>
+                    </tr>
+                    <tr>
+                        <td><div class="client-name">Mehdi Triki</div><div class="client-id">Dossier #20460</div></td>
+                        <td>Sami Ben Yaha</td>
+                        <td>593</td>
+                        <td><span class="score-pill mid"><span class="dot"></span>Révision</span></td>
+                        <td><button class="decision-btn">Valider</button></td>
+                    </tr>
+                    <tr>
+                        <td><div class="client-name">Nour Abidi</div><div class="client-id">Dossier #20459</div></td>
+                        <td>Amine Saidi</td>
+                        <td>412</td>
+                        <td><span class="score-pill high"><span class="dot"></span>Refusée</span></td>
+                        <td><button class="decision-btn">Valider</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        {% endif %}
+
+    </main>
+
 </body>
+
 </html>
